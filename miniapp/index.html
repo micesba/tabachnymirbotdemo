@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Табачный мир — демо бот-каталог</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div class="ageGate" id="ageGate">
+    <div class="ageCard">
+      <div class="logoMark">18+</div>
+      <h1>Подтвердите возраст</h1>
+      <p>Каталог содержит информацию о продукции 18+. Продолжая, вы подтверждаете, что вам есть 18 лет.</p>
+      <button id="ageYes" class="btn primary">Мне есть 18</button>
+      <button id="ageNo" class="btn ghost">Покинуть каталог</button>
+    </div>
+  </div>
+
+  <main class="app">
+    <header class="hero">
+      <div class="topbar">
+        <div>
+          <p class="eyebrow">ФУТСИТИ • оптовая точка</p>
+          <h1>Табачный мир</h1>
+        </div>
+        <button class="cartButton" id="openCart">🛒 <span id="cartCount">0</span></button>
+      </div>
+      <p class="heroText">Оптовая витрина для быстрого запроса прайса, подбора категории и заявки менеджеру.</p>
+      <div class="heroActions">
+        <button class="btn primary" data-scroll="catalog">Открыть каталог</button>
+        <button class="btn" data-scroll="ownBrand">Собственный табак</button>
+      </div>
+    </header>
+
+    <section class="quickGrid" aria-label="Быстрые действия">
+      <button data-action="price">Получить прайс</button>
+      <button data-action="order">Оптовый заказ</button>
+      <button data-scroll="delivery">Доставка</button>
+      <button data-scroll="address">Адрес ФУТСИТИ</button>
+    </section>
+
+    <section class="section" id="catalog">
+      <div class="sectionHead">
+        <div>
+          <p class="eyebrow">Категории</p>
+          <h2>Что интересует?</h2>
+        </div>
+      </div>
+      <div class="chips" id="categoryChips"></div>
+      <div class="searchRow">
+        <input id="searchInput" placeholder="Поиск по демо-каталогу" />
+        <select id="sortSelect">
+          <option value="default">Без сортировки</option>
+          <option value="priceAsc">Сначала дешевле</option>
+          <option value="priceDesc">Сначала дороже</option>
+        </select>
+      </div>
+      <div class="productGrid" id="productGrid"></div>
+    </section>
+
+    <section class="section brand" id="ownBrand">
+      <p class="eyebrow">Отдельный раздел</p>
+      <h2>Собственный табак</h2>
+      <p>В полной версии здесь будет линейка вкусов, условия для кальянных и магазинов, кнопка “Получить каталог” и заявка партнёра.</p>
+      <div class="brandActions">
+        <button class="btn primary" data-action="brand">Запросить каталог табака</button>
+        <button class="btn" data-action="partner">Стать партнёром</button>
+      </div>
+    </section>
+
+    <section class="section info" id="delivery">
+      <p class="eyebrow">Условия</p>
+      <h2>Доставка и отправка</h2>
+      <div class="infoList">
+        <div><b>Москва:</b> доставка по договорённости, уточняется менеджером.</div>
+        <div><b>Регионы:</b> отправка после согласования заказа и условий.</div>
+        <div><b>Опт:</b> прайс и наличие подтверждает менеджер.</div>
+      </div>
+    </section>
+
+    <section class="section info" id="address">
+      <p class="eyebrow">Где нас найти</p>
+      <h2>Точка на ФУТСИТИ</h2>
+      <p>Адрес и ориентир будут добавлены в рабочей версии после подтверждения владельцем.</p>
+      <button class="btn primary" data-action="manager">Написать менеджеру</button>
+    </section>
+  </main>
+
+  <aside class="cartPanel" id="cartPanel" aria-hidden="true">
+    <div class="cartHead">
+      <h2>Заявка</h2>
+      <button id="closeCart">×</button>
+    </div>
+    <div id="cartItems" class="cartItems"></div>
+    <div class="cartEmpty" id="cartEmpty">Пока ничего не добавлено. Выберите товары или запросите прайс.</div>
+    <form class="checkout" id="checkoutForm">
+      <h3>Контакты для заявки</h3>
+      <input name="name" placeholder="Имя" required />
+      <input name="city" placeholder="Город" required />
+      <input name="contact" placeholder="Telegram или телефон" required />
+      <textarea name="comment" placeholder="Комментарий: объём, категория, доставка"></textarea>
+      <button class="btn primary full" type="submit">Отправить заявку менеджеру</button>
+      <p class="small">Демо: в Telegram Mini App заявка отправится боту. В браузере появится демо-уведомление.</p>
+    </form>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+  <script src="assets/app.js"></script>
+</body>
+</html>
