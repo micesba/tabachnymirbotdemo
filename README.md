@@ -1,61 +1,62 @@
 # Демо бот-каталог «Табачный мир»
 
-Это демо-версия для показа владельцу магазина. Внутри:
+Готовая сборка для Vercel + Telegram webhook.
 
-- Telegram mini-app каталог (`miniapp/index.html`)
-- демо-категории и товары
-- корзина / заявка
-- форма контактов
-- 18+ age-gate
-- демо админ-панель (`miniapp/admin-demo.html`)
-- Telegram bot backend на aiogram (`bot/bot.py`)
+## Что внутри
 
-## Как показать без Telegram
+- `miniapp/` — Telegram mini-app каталог.
+- `api/webhook.py` — Telegram webhook для Vercel. Принимает `/start`, кнопки и заявки из mini-app.
+- `bot/` — локальная версия бота через polling. Для Vercel она не нужна, оставлена как резерв.
+- `index.html` — редирект на `miniapp/index.html`.
+- `vercel.json` — открывает mini-app с корня домена.
 
-Откройте файл:
+## Как запустить на Vercel
 
-`miniapp/index.html`
+1. Загрузить все файлы из этой папки в GitHub-репозиторий.
+2. В Vercel сделать Redeploy.
+3. В Vercel → Settings → Environment Variables добавить:
 
-Это интерактивная демо-версия каталога. Можно записать экран и показать путь клиента.
-
-Админ-панель для демонстрации:
-
-`miniapp/admin-demo.html`
-
-## Как запустить как Telegram bot + mini app
-
-1. Создайте бота через BotFather.
-2. Загрузите папку `miniapp` на HTTPS-хостинг.
-3. В папке `bot` создайте `.env` на основе `.env.example`.
-4. Установите зависимости:
-
-```bash
-pip install -r requirements.txt
+```env
+BOT_TOKEN=токен_от_BotFather
+WEBAPP_URL=https://tabachnymirbotdemo.vercel.app/miniapp/index.html
+MANAGER_CHAT_ID=-100xxxxxxxxxx
 ```
 
-5. Запустите:
+`MANAGER_CHAT_ID` — ID группы менеджеров. Бота нужно добавить в эту группу.
 
-```bash
-python bot.py
+4. Сделать Redeploy после добавления переменных.
+5. Проверить webhook:
+
+```text
+https://tabachnymirbotdemo.vercel.app/api/webhook
 ```
 
-6. В Telegram откройте бота и нажмите «Открыть бот-каталог».
+Должен быть ответ:
 
-## Что заменить перед показом клиенту
+```json
+{"ok": true, "service": "tabachny-mir-telegram-webhook"}
+```
 
-- реальные категории
-- реальные 10–15 товаров
-- фото товаров
-- цены или «цену уточнять»
-- адрес ФУТСИТИ
-- контакт менеджера
-- информацию по собственному табаку
+6. Подключить webhook Telegram:
 
-## Что входит только в полную версию
+```text
+https://api.telegram.org/bot<BOT_TOKEN>/setWebhook?url=https://tabachnymirbotdemo.vercel.app/api/webhook
+```
 
-- полный каталог
-- все товары
-- серверная админ-панель
-- хранение заявок в базе
-- управление ценами и наличием на сервере
-- полноценный запуск и инструкция
+После этого локальный `python bot.py` не нужен.
+
+## Проверка
+
+В Telegram открыть своего бота и написать `/start`.
+
+Потом:
+
+```text
+Открыть бот-каталог → добавить товар в заявку → заполнить форму → отправить заявку
+```
+
+Заявка должна прийти в группу менеджеров.
+
+## Важно
+
+Не загружать `.env` и токены в GitHub. Все секреты хранить только в Vercel Environment Variables.
