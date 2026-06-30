@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>Табачный мир — демо бот-каталог</title>
   <link rel="stylesheet" href="assets/style.css" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -50,7 +50,7 @@
       </div>
       <div class="chips" id="categoryChips"></div>
       <div class="searchRow">
-        <input id="searchInput" placeholder="Поиск по демо-каталогу" />
+        <input id="searchInput" placeholder="Поиск по демо-каталогу" autocomplete="off" enterkeyhint="search" />
         <select id="sortSelect">
           <option value="default">Без сортировки</option>
           <option value="priceAsc">Сначала дешевле</option>
@@ -97,15 +97,17 @@
     <div class="cartEmpty" id="cartEmpty">Пока ничего не добавлено. Выберите товары или запросите прайс.</div>
     <form class="checkout" id="checkoutForm">
       <h3>Контакты для заявки</h3>
-      <input name="name" placeholder="Имя" required />
-      <input name="city" placeholder="Город" required />
-      <input name="contact" placeholder="Telegram или телефон" required />
-      <textarea name="comment" placeholder="Комментарий: объём, категория, доставка"></textarea>
+      <input name="name" placeholder="Имя" autocomplete="name" enterkeyhint="next" required />
+      <input name="city" placeholder="Город" autocomplete="address-level2" enterkeyhint="next" required />
+      <input name="contact" placeholder="Telegram или телефон" autocomplete="tel" inputmode="text" enterkeyhint="next" required />
+      <textarea name="comment" placeholder="Комментарий: объём, категория, доставка" enterkeyhint="done"></textarea>
+      <button class="btn subtle keyboardHide" id="keyboardHide" type="button">Скрыть клавиатуру</button>
       <button class="btn primary full" type="submit">Отправить заявку менеджеру</button>
       <p class="small">Демо: в Telegram Mini App заявка отправится боту. В браузере появится демо-уведомление.</p>
     </form>
   </aside>
 
+  <button class="keyboardDone" id="keyboardDone" type="button">Готово</button>
   <div class="toast" id="toast"></div>
   <script src="assets/app.js"></script>
 </body>
