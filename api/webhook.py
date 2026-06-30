@@ -24,18 +24,17 @@ def tg_api(method: str, payload: dict):
 
 
 def main_keyboard():
+    # Важно: tg.sendData() корректно отправляет заявку боту,
+    # когда mini-app открыт через Reply Keyboard WebApp-кнопку.
+    # Поэтому здесь используем обычную клавиатуру, а не inline_keyboard.
     return {
-        "inline_keyboard": [
+        "keyboard": [
             [{"text": "🛒 Открыть бот-каталог", "web_app": {"url": WEBAPP_URL}}],
-            [
-                {"text": "📄 Получить прайс", "callback_data": "price"},
-                {"text": "📍 Адрес ФУТСИТИ", "callback_data": "address"},
-            ],
-            [
-                {"text": "🚚 Доставка", "callback_data": "delivery"},
-                {"text": "👤 Менеджер", "callback_data": "manager"},
-            ],
-        ]
+            ["📄 Получить прайс", "📍 Адрес ФУТСИТИ"],
+            ["🚚 Доставка", "👤 Менеджер"],
+        ],
+        "resize_keyboard": True,
+        "one_time_keyboard": False
     }
 
 
@@ -120,6 +119,21 @@ def handle_webapp_order(message):
     send_message(chat_id, "Заявка отправлена менеджеру. Скоро с вами свяжутся.")
 
 
+def handle_text_button(message):
+    chat_id = message["chat"]["id"]
+    text = message.get("text", "")
+    texts = {
+        "📄 Получить прайс": "Чтобы получить прайс, откройте каталог и отправьте заявку, либо напишите менеджеру.",
+        "📍 Адрес ФУТСИТИ": "ФУТСИТИ. Точный адрес и ориентир добавим после подтверждения владельцем.",
+        "🚚 Доставка": "Доставка по Москве и отправка в регионы согласовываются с менеджером после заявки.",
+        "👤 Менеджер": "Менеджер свяжется с вами после заявки. В полной версии добавим актуальный контакт.",
+    }
+    if text in texts:
+        send_message(chat_id, texts[text], main_keyboard())
+        return True
+    return False
+
+
 def process_update(update):
     message = update.get("message")
     if message:
@@ -129,6 +143,8 @@ def process_update(update):
         text = message.get("text", "")
         if text.startswith("/start"):
             handle_start(message)
+            return
+        if handle_text_button(message):
             return
 
     callback = update.get("callback_query")
